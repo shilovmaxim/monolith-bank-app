@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="bank-app-2 insert data to premium_status" author="Shilov Maxim">
+        <insert tableName="premium_status">
+            <column name="status" value="CLASSIC"/>
+        </insert>
+        <insert tableName="premium_status">
+            <column name="status" value="BLACK"/>
+        </insert>
+        <insert tableName="premium_status">
+            <column name="status" value="GOLD"/>
+        </insert>
+        <insert tableName="premium_status">
+            <column name="status" value="PLATINUM"/>
+        </insert>
+        <insert tableName="premium_status">
+            <column name="status" value="INFINITE"/>
+        </insert>
+        <insert tableName="premium_status">
+            <column name="status" value="SIGNATURE"/>
+        </insert>
+        <insert tableName="premium_status">
+            <column name="status" value="WORLD"/>
+        </insert>
+        <insert tableName="premium_status">
+            <column name="status" value="DEBIT"/>
+        </insert>
+        <insert tableName="premium_status">
+            <column name="status" value="SOCIAL"/>
+        </insert>
+        <insert tableName="premium_status">
+            <column name="status" value="SUPREME"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="bank-app-2 insert data to payment_system" author="Shilov Maxim">
+        <insert tableName="payment_system">
+            <column name="system" value="VISA"/>
+        </insert>
+        <insert tableName="payment_system">
+            <column name="system" value="MASTERCARD"/>
+        </insert>
+        <insert tableName="payment_system">
+            <column name="system" value="MIR"/>
+        </insert>
+        <insert tableName="payment_system">
+            <column name="system" value="DCL"/>
+        </insert>
+        <insert tableName="payment_system">
+            <column name="system" value="JSB"/>
+        </insert>
+        <insert tableName="payment_system">
+            <column name="system" value="AMEX"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

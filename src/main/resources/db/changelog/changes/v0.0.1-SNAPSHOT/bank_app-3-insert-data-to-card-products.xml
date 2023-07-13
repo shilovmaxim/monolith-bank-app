@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="bank-app-3 insert card products" author="Shilov Maxim">
+        <insert tableName="product">
+            <column name="card_name" value="Infinite"/>
+            <column name="cashback" value="1.0"/>
+            <column name="co_brand" value="McDonalds"/>
+            <column name="is_virtual" value="true"/>
+            <column name="currency_code" value="EUR"/>
+            <column name="is_active" value="true"/>
+            <column name="card_duration" value="3"/>
+            <column name="premium_id" valueComputed="(select id from premium_status as p where p.status = 'GOLD')"/>
+            <column name="payment_system_id" valueComputed="(select id from payment_system as p where p.system = 'MASTERCARD')"/>
+        </insert>
+
+        <insert tableName="product">
+            <column name="card_name" value="Smart Payout"/>
+            <column name="cashback" value="2.0"/>
+            <column name="co_brand" value="Wendy's"/>
+            <column name="is_virtual" value="false"/>
+            <column name="currency_code" value="USD"/>
+            <column name="is_active" value="true"/>
+            <column name="card_duration" value="4"/>
+            <column name="premium_id" valueComputed="(select id from premium_status as p where p.status = 'BLACK')"/>
+            <column name="payment_system_id" valueComputed="(select id from payment_system as p where p.system = 'VISA')"/>
+        </insert>
+
+        <insert tableName="product">
+            <column name="card_name" value="Premium"/>
+            <column name="cashback" value="3.0"/>
+            <column name="co_brand" value="KFC"/>
+            <column name="is_virtual" value="true"/>
+            <column name="currency_code" value="GBP"/>
+            <column name="is_active" value="true"/>
+            <column name="card_duration" value="5"/>
+            <column name="premium_id" valueComputed="(select id from premium_status as p where p.status = 'CLASSIC')"/>
+            <column name="payment_system_id" valueComputed="(select id from payment_system as p where p.system = 'AMEX')"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="uuid_type" value="UUID" dbms="postgresql"/>
+    <property name="uuid_function" value="gen_random_uuid()" dbms="postgresql"/>
+
+    <changeSet id="bank-app-1 create table account" author="Shilov Maxim">
+        <preConditions onFail="CONTINUE" onFailMessage="Table accounts already exists">
+            <not>
+                <tableExists tableName="account"/>
+            </not>
+        </preConditions>
+        <createTable tableName="account">
+            <column name="id" type="${uuid_type}" defaultValueComputed="${uuid_function}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="account_number" type="varchar(30)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="client_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="currency_code" type="char(3)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="current_balance" type="numeric(19,4)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="open_date" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="close_date" type="TIMESTAMP">
+                <constraints nullable="false" checkConstraint="CHECK (close_date > open_date)"/>
+            </column>
+            <column name="is_active" type="boolean" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="bank-app-1 create table payment_system" author="Shilov Maxim">
+        <preConditions onFail="CONTINUE" onFailMessage="Table payment_system already exists">
+            <not>
+                <tableExists tableName="card_product"/>
+            </not>
+        </preConditions>
+        <createTable tableName="payment_system">
+            <column name="id" type="${uuid_type}" defaultValueComputed="${uuid_function}">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="system" type="varchar(30)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="bank-app-1 add table premium status" author="Shilov Maxim">
+        <preConditions onFail="CONTINUE" onFailMessage="Table premium_status already exists">
+            <not>
+                <tableExists tableName="card_product"/>
+            </not>
+        </preConditions>
+        <createTable tableName="premium_status">
+            <column name="id" type="${uuid_type}" defaultValueComputed="${uuid_function}">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="status" type="varchar(30)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="bank-app-1 create table product" author="Shilov Maxim">
+        <preConditions onFail="CONTINUE" onFailMessage="Table card_products already exists">
+            <not>
+                <tableExists tableName="product"/>
+            </not>
+        </preConditions>
+        <createTable tableName="product">
+            <column name="id" type="${uuid_type}" defaultValueComputed="${uuid_function}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="card_name" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cashback" type="numeric(6,4)"/>
+            <column name="co_brand" type="varchar(30)"/>
+            <column name="is_virtual" type="boolean" defaultValueBoolean="false"/>
+            <column name="premium_id" type="uuid">
+                <constraints nullable="false" foreignKeyName="premium_id" references="premium_status(id)"/>
+            </column>
+            <column name="payment_system_id" type="uuid">
+                <constraints nullable="false" foreignKeyName="payment_system_id" references="payment_system(id)"/>
+            </column>
+            <column name="currency_code" type="char(3)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_active" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="card_duration" type="int"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="bank-app-1 create table card" author="Shilov Maxim">
+        <preConditions onFail="CONTINUE" onFailMessage="Table cards already exists">
+            <not>
+                <tableExists tableName="cards"/>
+            </not>
+        </preConditions>
+        <createTable tableName="card">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="card_number" type="varchar(16)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_id" type="uuid">
+                <constraints foreignKeyName="account_id" references="account(id)"/>
+            </column>
+            <column name="status" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="expiration_date" type="date">
+                <constraints nullable="false" checkConstraint="CHECK (expiration_date > now())"/>
+            </column>
+            <column name="holder_name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="virtual_card" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="digital_wallet" type="varchar(30)"/>
+            <column name="is_default" type="boolean">
+                <constraints nullable="false" />
+            </column>
+            <column name="product_id" type="uuid">
+                <constraints foreignKeyName="product_id" references="product(id)"/>
+            </column>
+            <column name="cvc" type="varchar(64)">
+                <constraints nullable="false" />
+            </column>
+            <column name="pin" type="varchar(64)">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,56 @@
+
+server:
+  port: 8080
+
+spring:
+  main:
+    banner-mode: console
+  application:
+    name: simple-bank-app
+
+  datasource:
+    url: ${datasource.url:jdbc:postgresql://localhost:5435/bank-app}
+    username: ${datasource.username:postgres}
+    password: ${datasource.password:postgres}
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      topic-card-to-card: "card-to-card"
+      group-id: payment
+    producer:
+      callback-topic: "callback"
+
+  liquibase:
+    change-log: classpath:/db/changelog/changelog-master.xml
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+
+eureka:
+  client:
+    enabled: false
+
+springdoc:
+  api-docs:
+    path: '/api-docs'
+  swagger-ui:
+    groups-order: DESC
+    path: '/swagger-ui'
+    operationsSorter: method
+  default-consumes-media-type: 'application/json'
+  default-produces-media-type: 'application/json'
+  model-converters:
+    pageable-converter:
+      enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    shutdown:
+      enabled: true
